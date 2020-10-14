@@ -14,6 +14,14 @@ public class QuizActivity extends AppCompatActivity {
     private Button mNextButton;
     private TextView mQuestionTextView;
 
+    private View.OnClickListener nextQuestionOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+            updateQuestion();
+        }
+    };
+
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
             new Question(R.string.question_oceans, true),
@@ -31,6 +39,7 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+        mQuestionTextView.setOnClickListener(nextQuestionOnClick);
 
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
@@ -48,13 +57,7 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         mNextButton = (Button) findViewById(R.id.next_button);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updateQuestion();
-            }
-        });
+        mNextButton.setOnClickListener(nextQuestionOnClick);
 
         updateQuestion();
     }

@@ -14,6 +14,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final String RIGHT_ANSWERS = "rightanswers";
 
     private Button mTrueButton;
     private Button mFalseButton;
@@ -30,6 +31,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private int mRightAnswers = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mRightAnswers = savedInstanceState.getInt(RIGHT_ANSWERS, 0);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -62,6 +65,12 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mCurrentIndex == mQuestionBank.length - 1) {
+                    Toast.makeText(QuizActivity.this,
+                                    String.format("You got %d%% correct answers", mRightAnswers * 100 / mQuestionBank.length),
+                                    Toast.LENGTH_LONG).show();
+                    mRightAnswers = 0;
+                }
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 mTrueButton.setEnabled(true);
                 mFalseButton.setEnabled(true);
@@ -95,6 +104,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.i(TAG, "onSaveInstanceState");
         outState.putInt(KEY_INDEX, mCurrentIndex);
+        outState.putInt(RIGHT_ANSWERS, mRightAnswers);
     }
 
     @Override
@@ -125,6 +135,7 @@ public class QuizActivity extends AppCompatActivity {
         int messageResId = 0;
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
+            mRightAnswers++;
         } else {
             messageResId = R.string.incorrect_toast;
         }

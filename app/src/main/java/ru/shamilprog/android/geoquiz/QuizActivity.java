@@ -63,6 +63,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                mTrueButton.setEnabled(true);
+                mFalseButton.setEnabled(true);
                 updateQuestion();
             }
         });
@@ -109,11 +111,16 @@ public class QuizActivity extends AppCompatActivity {
 
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
+        mNextButton.setEnabled(false);
         mQuestionTextView.setText(question);
     }
 
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+
+        mTrueButton.setEnabled(false);
+        mFalseButton.setEnabled(false);
+        mNextButton.setEnabled(true);
 
         int messageResId = 0;
         if (userPressedTrue == answerIsTrue) {

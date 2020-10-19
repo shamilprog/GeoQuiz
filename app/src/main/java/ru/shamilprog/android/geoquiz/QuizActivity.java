@@ -1,5 +1,6 @@
 package ru.shamilprog.android.geoquiz;
 
+import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -72,7 +73,9 @@ public class QuizActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // Запуск CheatActivity
+                Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+                startActivity(intent);
             }
         });
 

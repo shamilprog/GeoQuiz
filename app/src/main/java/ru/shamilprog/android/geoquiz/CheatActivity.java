@@ -11,12 +11,14 @@ import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
+    private static final String KEY_ANSWER_SHOWN = "answer_shown";
     private static final String EXTRA_ANSWER_IS_TRUE =
             "ru.shamilprog.android.geoguiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN =
             "ru.shamilprog.android.geoguiz.answer_shown";
 
     private boolean mAnswerIsTrue;
+    private boolean mIsAnswerShown;
 
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
@@ -45,17 +47,32 @@ public class CheatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mAnswerIsTrue) {
                     mAnswerTextView.setText(R.string.true_button);
+                    mIsAnswerShown = true;
                 } else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
-                setAnswerShownResult(true);
+                setAnswerShownResult();
             }
         });
+
+        if (savedInstanceState != null) {
+            mIsAnswerShown = savedInstanceState.getBoolean(KEY_ANSWER_SHOWN, false);
+        }
+
+        if (mIsAnswerShown) {
+            mShowAnswerButton.callOnClick();
+        }
     }
 
-    private void setAnswerShownResult(boolean isAnswerShown) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_ANSWER_SHOWN, mIsAnswerShown);
+    }
+
+    private void setAnswerShownResult() {
         Intent data = new Intent();
-        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        data.putExtra(EXTRA_ANSWER_SHOWN, mIsAnswerShown);
         setResult(RESULT_OK, data);
     }
 }

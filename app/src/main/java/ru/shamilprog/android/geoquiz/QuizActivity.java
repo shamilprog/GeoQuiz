@@ -16,6 +16,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final String KEY_NUMBER_OF_CHEATS = "numberOfCheats";
     private static final int REQUEST_CODE_CHEAT = 0;
 
     private Button mTrueButton;
@@ -35,6 +36,11 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private boolean mIsCheater;
+    private static int mNumberOfCheats = 3;
+
+    public static int getNumberOfCheats() {
+        return mNumberOfCheats;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mNumberOfCheats = savedInstanceState.getInt(KEY_NUMBER_OF_CHEATS, 3);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -97,6 +104,12 @@ public class QuizActivity extends AppCompatActivity {
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
+            if (mIsCheater) {
+                mNumberOfCheats--;
+                if (mNumberOfCheats <= 0) {
+                    mNumberOfCheats = 0;
+                }
+            }
         }
     }
 
@@ -123,6 +136,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Log.i(TAG, "onSaveInstanceState");
         outState.putInt(KEY_INDEX, mCurrentIndex);
+        outState.putInt(KEY_NUMBER_OF_CHEATS, mNumberOfCheats);
     }
 
     @Override

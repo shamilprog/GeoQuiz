@@ -19,6 +19,8 @@ public class CheatActivity extends AppCompatActivity {
             "ru.shamilprog.android.geoguiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN =
             "ru.shamilprog.android.geoguiz.answer_shown";
+    private static final String EXTRA_NUMBER_OF_CHEATS =
+            "ru.shamilprog.android.geoguiz.number_of_cheats";
 
     private boolean mAnswerIsTrue;
 
@@ -46,7 +48,7 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
 
         mBuildVersionTextView = (TextView) findViewById(R.id.buildversion_text_view);
-        mBuildVersionTextView.setText("API Level " + Build.VERSION.SDK_INT);
+        mBuildVersionTextView.setText("Number of cheats left: " + QuizActivity.getNumberOfCheats());
 
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
         mShowAnswerButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +79,9 @@ public class CheatActivity extends AppCompatActivity {
                 }
             }
         });
+        if (QuizActivity.getNumberOfCheats() <= 0) {
+            mShowAnswerButton.setEnabled(false);
+        }
     }
 
     private void setAnswerShownResult(boolean isAnswerShown) {
